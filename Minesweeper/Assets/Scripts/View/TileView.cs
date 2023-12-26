@@ -28,9 +28,8 @@ namespace Minesweeper.View
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            //_tileModel.Reveal();
-            _tileModel.IncrementBombCount();
-            //StartCoroutine(Flip());
+            _tileModel.Reveal();
+            StartCoroutine(Flip());
         }
 
         private IEnumerator Flip()

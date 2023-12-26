@@ -4,6 +4,7 @@ namespace Minesweeper.Model
     {
         public GC GC;
         public bool IsRevealed { get; private set; }
+        public Observable<bool> HasBomb { get; set; } = new(true);
         public Observable<int> CountOfAdjacentBombs { get; set; } = new(0);
 
         public TileModel(GC gC)

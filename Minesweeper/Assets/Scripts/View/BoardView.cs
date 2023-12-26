@@ -1,5 +1,6 @@
 using Minesweeper.Model;
 using UnityEngine;
+using static UnityEditor.PlayerSettings;
 
 namespace Minesweeper.View
 {
@@ -7,10 +8,13 @@ namespace Minesweeper.View
     {
         private BoardModel _boardModel;
         private GameObject _tilePrefab;
+        private GameObject _bombPrefab;
+
 
         private void Awake()
         {
             _tilePrefab = Resources.Load<GameObject>("Prefabs/Tile");
+            _bombPrefab = Resources.Load<GameObject>("Prefabs/Bomb");
         }
 
         public void Initialize(BoardModel boardModel)
@@ -24,6 +28,7 @@ namespace Minesweeper.View
             foreach (TileModel tileModel in _boardModel.TileDictionary.ListOfTiles)
             {
                 SpawnTileView(tileModel);
+
             }
 
             void SpawnTileView(TileModel tileModel)
@@ -32,7 +37,19 @@ namespace Minesweeper.View
                 GameObject tileView = Instantiate(_tilePrefab, pos, Quaternion.identity, transform);
                 tileView.name = $"Tile ({tileModel.GC.X}, {tileModel.GC.Z})";
                 tileView.GetComponent<TileView>().Initialize(tileModel);
+                if (tileModel.HasBomb.Value)
+                {
+                    SpawnBomb();
+                }
+
+                void SpawnBomb()
+                {
+                    GameObject bombView = Instantiate(_bombPrefab, pos, Quaternion.identity, tileView.transform);
+                    bombView.name = $"Bomb ({tileModel.GC.X}, {tileModel.GC.Z})";
+                }
             }
+
+
         }
 
     }

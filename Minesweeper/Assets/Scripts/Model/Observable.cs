@@ -2,18 +2,9 @@ using System;
 
 namespace Minesweeper.Model
 {
+    // This class handles making properties with callback handling abilities
     public class Observable<T>
     {
-        public void Subscribe(Action<T> callback)
-        {
-            _action += callback;
-        }
-
-        public void Unsubscribe(Action<T> callback)
-        {
-            _action -= callback;
-        }
-
         public T Value
         {
             get => _value;
@@ -25,13 +16,23 @@ namespace Minesweeper.Model
             }
         }
 
-        private T _value;
-        private Action<T> _action;
+        public void Subscribe(Action<T> callback)
+        {
+            _action += callback;
+        }
+
+        public void Unsubscribe(Action<T> callback)
+        {
+            _action -= callback;
+        }
 
         public Observable(T value)
         {
             _value = value;
         }
+
+        private T _value;
+        private Action<T> _action;
     }
 
 }
