@@ -17,7 +17,7 @@ namespace Minesweeper.Model
             {
                 for (int j = 0; j < 10; j++)
                 {
-                    GC gC = new GC(i,j);
+                    GC gC = new GC(i, j);
                     TileModel tileModel = new TileModel(gC);
                     TileDictionary.Add(gC, tileModel);
                 }
