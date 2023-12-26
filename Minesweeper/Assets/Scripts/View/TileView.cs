@@ -28,7 +28,7 @@ namespace Minesweeper.View
 
         private void TileModel_OnHasBomb(bool boolean)
         {
-            if(boolean)
+            if (boolean)
             {
                 SpawnBomb.Invoke(this, _tileModel);
             }
@@ -46,11 +46,8 @@ namespace Minesweeper.View
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            //_tileModel.Reveal();
-            //
-            //_tileModel.IncrementBombCount();
-            Debug.Log("I'm Tile " + gameObject.name + " and I have this bombs around me " + _tileModel.CountOfAdjacentBombs.Value);
-            if(eventData.button == PointerEventData.InputButton.Left)
+            //Debug.Log("I'm Tile " + gameObject.name + " and I have this bombs around me " + _tileModel.CountOfAdjacentBombs.Value);
+            if (eventData.button == PointerEventData.InputButton.Left)
             {
                 _tileModel.OnRevealClick();
             }

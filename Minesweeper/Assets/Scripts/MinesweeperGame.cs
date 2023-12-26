@@ -1,5 +1,5 @@
-using Minesweeper.View;
 using Minesweeper.Model;
+using Minesweeper.View;
 using UnityEngine;
 
 public class MinesweeperGame : MonoBehaviour
@@ -8,9 +8,15 @@ public class MinesweeperGame : MonoBehaviour
 
     private void Start()
     {
-        _minesweeperEngine = new(8, 8, 10); // TODO: Insert checks on maximum width, height and amount of bombs
+        SetupEngine();
         SetupBoardView();
     }
+
+    private void SetupEngine()
+    {
+        _minesweeperEngine = new(8, 8, 10); // TODO: Insert checks on maximum width, height and amount of bombs
+    }
+
     private void SetupBoardView()
     {
         GameObject board = new GameObject("Board");
@@ -19,10 +25,10 @@ public class MinesweeperGame : MonoBehaviour
 
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             Debug.Log("Spaaace");
-            _minesweeperEngine.BoardModel.TileDictionary.GetTile(new GC(5, 5)).IncrementBombCount() ;
+            _minesweeperEngine.BoardModel.TileDictionary.GetTile(new GC(5, 5)).IncrementBombCount();
         }
     }
 }

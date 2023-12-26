@@ -1,5 +1,3 @@
-using System;
-
 namespace Minesweeper.Model
 {
     public class TileModel
@@ -9,6 +7,8 @@ namespace Minesweeper.Model
         public ObservableValue<bool> HasBomb { get; set; } = new(false);
         public ObservableValue<int> CountOfAdjacentBombs { get; set; } = new(0);
         public ObservableValue<bool> ShowCountOfAdjacentBombs { get; } = new(false);
+        public Observable<TileModel> RevealClick { get; } = new();
+        public Observable<TileModel> FlagClick { get; } = new();
 
 
         public TileModel(GC gC)
@@ -35,8 +35,5 @@ namespace Minesweeper.Model
         {
             FlagClick?.Invoke(this);
         }
-
-        public Observable<TileModel> RevealClick { get; } = new();
-        public Observable<TileModel> FlagClick { get; } = new();
     }
 }

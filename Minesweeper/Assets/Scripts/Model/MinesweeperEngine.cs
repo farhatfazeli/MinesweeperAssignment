@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Minesweeper.Model
 {
@@ -7,6 +9,7 @@ namespace Minesweeper.Model
         public BoardModel BoardModel { get; }
         public int AmountOfBombs { get; }
 
+        #region Constructor
         private bool _isBombsSetup;
 
         public MinesweeperEngine(int width, int height, int amountOfBombs)
@@ -30,40 +33,11 @@ namespace Minesweeper.Model
                 }
             }
         }
-
-        private void SetupBombs(TileModel tileModel)
-        {
-            SpawnBombs(tileModel);
-            CalculateAdjacentBombCounts();
-            _isBombsSetup = true;
-        }
-
-
-        private void CalculateAdjacentBombCounts()
-        {
-            foreach (TileModel bombTile in BoardModel.TilesWithBombs)
-            {
-               foreach (TileModel surroundingTile in BoardModel.SurroundingTiles(bombTile))
-                {
-                    surroundingTile.IncrementBombCount();
-                }
-            }
-        }
-
-        private void SpawnBombs(TileModel firstClickedTile)
-        {
-            Random random = new();
-            for(int i = 0;  i < AmountOfBombs; i++)
-            {
-                TileModel tile = BoardModel.GetRandomTileWithoutBomb(random);
-                tile.HasBomb.Value = true;
-                BoardModel.TilesWithBombs.Add(tile);
-            }
-        }
+        #endregion
 
         private void TileModel_OnRevealClick(TileModel tile)
         {
-            if(!_isBombsSetup)
+            if (!_isBombsSetup)
             {
                 SetupBombs(tile);
             }
@@ -75,13 +49,45 @@ namespace Minesweeper.Model
             FlagTile(tile);
         }
 
-        private void FlagTile(TileModel tile)
+        #region Bomb Setup
+        private void SetupBombs(TileModel tileModel)
         {
-
+            SpawnBombs(tileModel);
+            CalculateAdjacentBombCounts();
+            _isBombsSetup = true;
         }
+
+        private void SpawnBombs(TileModel firstClickedTile)
+        {
+            List<TileModel> allTiles = BoardModel.TileDictionary.ListOfTiles;
+            List<TileModel> ineligibleTiles = BoardModel.SurroundingTiles(firstClickedTile); // no bombs are allowed on the first clicked tile and its surrounding tiles
+            ineligibleTiles.Add(firstClickedTile);
+            List<TileModel> eligibleTiles = allTiles.Except(ineligibleTiles).ToList();
+
+            List<TileModel> tilesWithBombs = eligibleTiles.OrderBy(x => Guid.NewGuid()).Take(AmountOfBombs).ToList();
+
+            foreach(TileModel tileModel in tilesWithBombs)
+            {
+                tileModel.HasBomb.Value = true;
+                BoardModel.TilesWithBombs.Add(tileModel);
+            }
+        }
+        
+        private void CalculateAdjacentBombCounts()
+        {
+            foreach (TileModel bombTile in BoardModel.TilesWithBombs)
+            {
+                foreach (TileModel surroundingTile in BoardModel.SurroundingTiles(bombTile))
+                {
+                    surroundingTile.IncrementBombCount();
+                }
+            }
+        }
+        #endregion
 
         private void RevealTile(TileModel tile)
         {
+            if (tile.HasBomb.Value) GameOver();
             if (tile.IsRevealed.Value) return;
             tile.Reveal();
 
@@ -95,6 +101,16 @@ namespace Minesweeper.Model
             {
                 RevealTile(surroundingTile);
             }
+        }
+
+        private void GameOver()
+        {
+            throw new NotImplementedException();
+        }
+
+        private void FlagTile(TileModel tile)
+        {
+
         }
     }
 }
