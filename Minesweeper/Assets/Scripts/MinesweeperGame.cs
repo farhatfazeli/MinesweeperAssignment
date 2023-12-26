@@ -8,7 +8,7 @@ public class MinesweeperGame : MonoBehaviour
 
     private void Start()
     {
-        _minesweeperEngine = new();
+        _minesweeperEngine = new(10, 10, 10); // TODO: Insert checks on maximum width, height and amount of bombs
         SetupBoardView();
     }
     private void SetupBoardView()
