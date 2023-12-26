@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace Minesweeper.Model
 {
@@ -6,12 +7,14 @@ namespace Minesweeper.Model
     {
         public int Width { get; }
         public int Height { get; }
-        public TileDictionary TileDictionary { get; } = new();
+        public TileDictionary TileDictionary { get; }
+        public List<TileModel> TilesWithBombs { get; } = new();
 
         public BoardModel(int width, int height)
         {
             Width = width;
             Height = height;
+            TileDictionary = new(this);
             SpawnTiles();
         }
 
@@ -28,7 +31,7 @@ namespace Minesweeper.Model
             }
         }
 
-        public TileModel GetRandomTileWithoutBomb(Random random)
+        public TileModel GetRandomTileWithoutBomb(Random random) //TODO: Optimise random search
         {
             int x = random.Next(0, Width);
             int z = random.Next(0, Height);
@@ -37,6 +40,11 @@ namespace Minesweeper.Model
                 return tileModel;
             else return GetRandomTileWithoutBomb(random);
         }
+
+        //public List<TileModel> SurroundingTiles(TileModel tileModel)
+        //{
+
+        //}
     }
 }
 

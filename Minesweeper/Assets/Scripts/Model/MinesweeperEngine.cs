@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Minesweeper.Model
 {
@@ -10,7 +11,18 @@ namespace Minesweeper.Model
         {
             BoardModel = new BoardModel(width, height);
             SpawnBombs(amountOfBombs);
+            CalculateAdjacentBombCounts();
+        }
 
+        private void CalculateAdjacentBombCounts()
+        {
+            foreach (TileModel tile in BoardModel.TilesWithBombs)
+            {
+               // List<TileModel> surroundingTiles =
+               //
+               GC gc = new GC(1, 2);
+
+            }
         }
 
         private void SpawnBombs(int amountOfBombs)
@@ -20,6 +32,7 @@ namespace Minesweeper.Model
             {
                 TileModel tile = BoardModel.GetRandomTileWithoutBomb(random);
                 tile.HasBomb.Value = true;
+                BoardModel.TilesWithBombs.Add(tile);
             }
         }
     }

@@ -23,13 +23,18 @@ namespace Minesweeper.View
 
         private void TileModel_OnCountOfAdjacentBombsUpdate(int value)
         {
+            if(value != 0)
+            {
+                _bombCountText.gameObject.SetActive(true);
+            }
             _bombCountText.text = value.ToString();
         }
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            _tileModel.Reveal();
-            StartCoroutine(Flip());
+            //_tileModel.Reveal();
+            //StartCoroutine(Flip());
+            _tileModel.IncrementBombCount();
         }
 
         private IEnumerator Flip()

@@ -16,4 +16,13 @@ public class MinesweeperGame : MonoBehaviour
         GameObject board = new GameObject("Board");
         board.AddComponent<BoardView>().Initialize(_minesweeperEngine.BoardModel);
     }
+
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.Space)) 
+        {
+            Debug.Log("Spaaace");
+            _minesweeperEngine.BoardModel.TileDictionary.GetTile(new GC(15, 12)).IncrementBombCount();
+        }
+    }
 }
