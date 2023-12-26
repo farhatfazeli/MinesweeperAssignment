@@ -41,10 +41,16 @@ namespace Minesweeper.Model
             else return GetRandomTileWithoutBomb(random);
         }
 
-        //public List<TileModel> SurroundingTiles(TileModel tileModel)
-        //{
-
-        //}
+        public List<TileModel> SurroundingTiles(TileModel tileModel)
+        {
+            List<TileModel> surroundingTiles = new();
+            foreach(GCD gcd in GC.AllDirections)
+            {
+                TileModel surroundingTile = TileDictionary.GetTile(tileModel.GC.NeighbourGC(gcd));
+                surroundingTiles.Add(surroundingTile);
+            }
+            return surroundingTiles;
+        }
     }
 }
 

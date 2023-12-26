@@ -16,12 +16,12 @@ namespace Minesweeper.Model
 
         private void CalculateAdjacentBombCounts()
         {
-            foreach (TileModel tile in BoardModel.TilesWithBombs)
+            foreach (TileModel bombTile in BoardModel.TilesWithBombs)
             {
-               // List<TileModel> surroundingTiles =
-               //
-               GC gc = new GC(1, 2);
-
+               foreach (TileModel surroundingTile in BoardModel.SurroundingTiles(bombTile))
+                {
+                    surroundingTile.IncrementBombCount();
+                }
             }
         }
 
