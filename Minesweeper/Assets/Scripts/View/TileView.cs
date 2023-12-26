@@ -16,7 +16,7 @@ namespace Minesweeper.View
 
         public void Initialize()
         {
-            _tileModel = new TileModel(new GC(0,0));
+            _tileModel = new TileModel(new GC(0, 0));
         }
 
         public void OnPointerClick(PointerEventData eventData)
