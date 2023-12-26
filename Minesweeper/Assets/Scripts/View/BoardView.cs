@@ -21,17 +21,17 @@ namespace Minesweeper.View
 
         private void PopulateBoardView()
         {
-            foreach (GC gc in _boardModel.TileDictionary.Keys)
+            foreach (TileModel tileModel in _boardModel.TileDictionary.ListOfTiles)
             {
-                SpawnTile(gc);
+                SpawnTileView(tileModel);
             }
 
-            void SpawnTile(GC coordinate)
+            void SpawnTileView(TileModel tileModel)
             {
-                Vector3 pos = GCHelper.ModelToView(coordinate);
-                GameObject tile = Instantiate(_tilePrefab, pos, Quaternion.identity, transform);
-                tile.name = $"Tile ({coordinate.X}, {coordinate.Z})";
-                //tile.GetComponent<TileView>().Initialize(_boardModel.TileDictionary.GetTile(coordinate));
+                Vector3 pos = GCHelper.ModelToView(tileModel.GC);
+                GameObject tileView = Instantiate(_tilePrefab, pos, Quaternion.identity, transform);
+                tileView.name = $"Tile ({tileModel.GC.X}, {tileModel.GC.Z})";
+                tileView.GetComponent<TileView>().Initialize(tileModel);
             }
         }
 

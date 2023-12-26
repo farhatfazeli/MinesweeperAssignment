@@ -4,6 +4,7 @@ namespace Minesweeper.Model
     {
         public GC GC;
         public bool IsRevealed { get; private set; }
+        public Observable<int> CountOfAdjacentBombs { get; set; } = new(0);
 
         public TileModel(GC gC)
         {
@@ -12,7 +13,13 @@ namespace Minesweeper.Model
 
         public void Reveal()
         {
+            if (IsRevealed) return;
             IsRevealed = true;
+        }
+
+        public void IncrementBombCount()
+        {
+            CountOfAdjacentBombs.Value += 1;
         }
     }
 }

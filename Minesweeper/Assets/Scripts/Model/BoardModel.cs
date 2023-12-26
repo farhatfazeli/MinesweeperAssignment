@@ -4,7 +4,7 @@ namespace Minesweeper.Model
 {
     public class BoardModel
     {
-        public Dictionary<GC, TileModel> TileDictionary = new();
+        public TileDictionary TileDictionary = new();
 
         public BoardModel()
         {

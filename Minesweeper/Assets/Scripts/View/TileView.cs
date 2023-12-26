@@ -1,6 +1,9 @@
 using Minesweeper.Model;
+using System;
 using System.Collections;
+using TMPro;
 using UnityEngine;
+using UnityEngine.Assertions;
 using UnityEngine.EventSystems;
 
 namespace Minesweeper.View
@@ -8,22 +11,26 @@ namespace Minesweeper.View
     public class TileView : MonoBehaviour, IPointerClickHandler
     {
         [SerializeField] private int _tileFlipSpeed = 60;
+        [SerializeField] private TextMeshPro _bombCountText;
         private TileModel _tileModel;
 
-        private void OnEnable()
+        public void Initialize(TileModel tileModel)
         {
-            Initialize();
+            _tileModel = tileModel;
+            _tileModel.CountOfAdjacentBombs.Subscribe(TileModel_OnCountOfAdjacentBombsUpdate);
+            Assert.IsNotNull(_bombCountText);
         }
 
-        public void Initialize()
+        private void TileModel_OnCountOfAdjacentBombsUpdate(int value)
         {
-            _tileModel = new TileModel(new GC(0, 0));
+            _bombCountText.text = value.ToString();
         }
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            _tileModel.Reveal();
-            StartCoroutine(Flip());
+            //_tileModel.Reveal();
+            _tileModel.IncrementBombCount();
+            //StartCoroutine(Flip());
         }
 
         private IEnumerator Flip()
@@ -31,7 +38,6 @@ namespace Minesweeper.View
             Vector3 targetRotation = new Vector3(180, 0, 0);
             while (transform.rotation.eulerAngles.x < targetRotation.x)
             {
-                Debug.Log("eulerX " + transform.rotation.eulerAngles.x + "and targetrotation.x: " + targetRotation.x);
                 transform.rotation *= Quaternion.Euler(_tileFlipSpeed * Time.deltaTime, 0, 0);
                 yield return null;
             }
