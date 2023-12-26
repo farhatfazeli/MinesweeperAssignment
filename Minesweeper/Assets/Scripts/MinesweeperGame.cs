@@ -8,7 +8,7 @@ public class MinesweeperGame : MonoBehaviour
 
     private void Start()
     {
-        _minesweeperEngine = new(10, 10, 10); // TODO: Insert checks on maximum width, height and amount of bombs
+        _minesweeperEngine = new(8, 8, 10); // TODO: Insert checks on maximum width, height and amount of bombs
         SetupBoardView();
     }
     private void SetupBoardView()
@@ -19,10 +19,10 @@ public class MinesweeperGame : MonoBehaviour
 
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Space)) 
-        {
-            Debug.Log("Spaaace");
-            _minesweeperEngine.BoardModel.TileDictionary.GetTile(new GC(15, 12)).IncrementBombCount();
-        }
+        //if(Input.GetKeyDown(KeyCode.Space)) 
+        //{
+        //    Debug.Log("Spaaace");
+        //    _minesweeperEngine.RevealTile(_minesweeperEngine.BoardModel.TileDictionary.GetTile(new GC(5, 5)));
+        //}
     }
 }

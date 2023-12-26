@@ -18,6 +18,7 @@ namespace Minesweeper.View
         {
             _tileModel = tileModel;
             _tileModel.CountOfAdjacentBombs.Subscribe(TileModel_OnCountOfAdjacentBombsUpdate);
+            _tileModel.IsRevealed.Subscribe(TileModel_OnRevealTile);
             Assert.IsNotNull(_bombCountText);
         }
 
@@ -33,8 +34,22 @@ namespace Minesweeper.View
         public void OnPointerClick(PointerEventData eventData)
         {
             //_tileModel.Reveal();
-            //StartCoroutine(Flip());
-            _tileModel.IncrementBombCount();
+            //
+            //_tileModel.IncrementBombCount();
+            if(eventData.button == PointerEventData.InputButton.Left)
+            {
+                _tileModel.OnRevealClick();
+            }
+            else if (eventData.button == PointerEventData.InputButton.Right)
+            {
+                _tileModel.OnFlagClick();
+            }
+        }
+
+        private void TileModel_OnRevealTile(bool value)
+        {
+            StartCoroutine(Flip());
+            Debug.Log("Test tile reveal");
         }
 
         private IEnumerator Flip()

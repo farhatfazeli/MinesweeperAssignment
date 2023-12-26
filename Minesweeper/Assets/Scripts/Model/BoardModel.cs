@@ -15,21 +15,9 @@ namespace Minesweeper.Model
             Width = width;
             Height = height;
             TileDictionary = new(this);
-            SpawnTiles();
         }
 
-        private void SpawnTiles()
-        {
-            for (int i = 0; i < Width; i++)
-            {
-                for (int j = 0; j < Height; j++)
-                {
-                    GC gC = new GC(i, j);
-                    TileModel tileModel = new TileModel(gC);
-                    TileDictionary.Add(gC, tileModel);
-                }
-            }
-        }
+
 
         public TileModel GetRandomTileWithoutBomb(Random random) //TODO: Optimise random search
         {
