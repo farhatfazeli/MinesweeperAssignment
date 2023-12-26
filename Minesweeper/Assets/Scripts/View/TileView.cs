@@ -14,21 +14,34 @@ namespace Minesweeper.View
         [SerializeField] private TextMeshPro _bombCountText;
         private TileModel _tileModel;
 
+        public Action<TileView, TileModel> SpawnBomb { get; set; }
+
         public void Initialize(TileModel tileModel)
         {
             _tileModel = tileModel;
             _tileModel.CountOfAdjacentBombs.Subscribe(TileModel_OnCountOfAdjacentBombsUpdate);
             _tileModel.IsRevealed.Subscribe(TileModel_OnRevealTile);
+            _tileModel.ShowCountOfAdjacentBombs.Subscribe(TileModel_OnShowCountOfAdjacentBombs);
+            _tileModel.HasBomb.Subscribe(TileModel_OnHasBomb);
             Assert.IsNotNull(_bombCountText);
+        }
+
+        private void TileModel_OnHasBomb(bool boolean)
+        {
+            if(boolean)
+            {
+                SpawnBomb.Invoke(this, _tileModel);
+            }
         }
 
         private void TileModel_OnCountOfAdjacentBombsUpdate(int value)
         {
-            if(value != 0)
-            {
-                _bombCountText.gameObject.SetActive(true);
-            }
             _bombCountText.text = value.ToString();
+        }
+
+        private void TileModel_OnShowCountOfAdjacentBombs(bool boolean)
+        {
+            _bombCountText.gameObject.SetActive(boolean);
         }
 
         public void OnPointerClick(PointerEventData eventData)
@@ -36,6 +49,7 @@ namespace Minesweeper.View
             //_tileModel.Reveal();
             //
             //_tileModel.IncrementBombCount();
+            Debug.Log("I'm Tile " + gameObject.name + " and I have this bombs around me " + _tileModel.CountOfAdjacentBombs.Value);
             if(eventData.button == PointerEventData.InputButton.Left)
             {
                 _tileModel.OnRevealClick();

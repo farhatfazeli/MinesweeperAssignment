@@ -19,10 +19,10 @@ public class MinesweeperGame : MonoBehaviour
 
     private void Update()
     {
-        //if(Input.GetKeyDown(KeyCode.Space)) 
-        //{
-        //    Debug.Log("Spaaace");
-        //    _minesweeperEngine.RevealTile(_minesweeperEngine.BoardModel.TileDictionary.GetTile(new GC(5, 5)));
-        //}
+        if(Input.GetKeyDown(KeyCode.Space))
+        {
+            Debug.Log("Spaaace");
+            _minesweeperEngine.BoardModel.TileDictionary.GetTile(new GC(5, 5)).IncrementBombCount() ;
+        }
     }
 }

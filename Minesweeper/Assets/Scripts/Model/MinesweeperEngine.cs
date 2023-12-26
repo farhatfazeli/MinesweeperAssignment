@@ -4,14 +4,16 @@ namespace Minesweeper.Model
 {
     public class MinesweeperEngine
     {
-        public BoardModel BoardModel { get; private set; }
+        public BoardModel BoardModel { get; }
+        public int AmountOfBombs { get; }
+
+        private bool _isBombsSetup;
 
         public MinesweeperEngine(int width, int height, int amountOfBombs)
         {
             BoardModel = new BoardModel(width, height);
+            AmountOfBombs = amountOfBombs;
             SpawnTiles();
-            SpawnBombs(amountOfBombs);
-            CalculateAdjacentBombCounts();
         }
 
         private void SpawnTiles()
@@ -29,6 +31,14 @@ namespace Minesweeper.Model
             }
         }
 
+        private void SetupBombs(TileModel tileModel)
+        {
+            SpawnBombs(tileModel);
+            CalculateAdjacentBombCounts();
+            _isBombsSetup = true;
+        }
+
+
         private void CalculateAdjacentBombCounts()
         {
             foreach (TileModel bombTile in BoardModel.TilesWithBombs)
@@ -40,10 +50,10 @@ namespace Minesweeper.Model
             }
         }
 
-        private void SpawnBombs(int amountOfBombs)
+        private void SpawnBombs(TileModel firstClickedTile)
         {
             Random random = new();
-            for(int i = 0;  i < amountOfBombs; i++)
+            for(int i = 0;  i < AmountOfBombs; i++)
             {
                 TileModel tile = BoardModel.GetRandomTileWithoutBomb(random);
                 tile.HasBomb.Value = true;
@@ -53,6 +63,10 @@ namespace Minesweeper.Model
 
         private void TileModel_OnRevealClick(TileModel tile)
         {
+            if(!_isBombsSetup)
+            {
+                SetupBombs(tile);
+            }
             RevealTile(tile);
         }
 
@@ -68,8 +82,15 @@ namespace Minesweeper.Model
 
         private void RevealTile(TileModel tile)
         {
-            if (tile.CountOfAdjacentBombs.Value > 0 || tile.IsRevealed.Value) return;
+            if (tile.IsRevealed.Value) return;
             tile.Reveal();
+
+            if (tile.CountOfAdjacentBombs.Value > 0)
+            {
+                tile.ShowCountOfAdjacentBombs.Value = true;
+                return;
+            }
+
             foreach (TileModel surroundingTile in BoardModel.SurroundingTiles(tile))
             {
                 RevealTile(surroundingTile);

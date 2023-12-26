@@ -1,4 +1,7 @@
 using Minesweeper.Model;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEditor.IMGUI.Controls;
 using UnityEngine;
 using static UnityEditor.PlayerSettings;
 
@@ -20,15 +23,14 @@ namespace Minesweeper.View
         public void Initialize(BoardModel boardModel)
         {
             _boardModel = boardModel;
-            PopulateBoardView();
+            PopulateWithTiles();
         }
 
-        private void PopulateBoardView()
+        private void PopulateWithTiles()
         {
             foreach (TileModel tileModel in _boardModel.TileDictionary.ListOfTiles)
             {
                 SpawnTileView(tileModel);
-
             }
 
             void SpawnTileView(TileModel tileModel)
@@ -37,20 +39,15 @@ namespace Minesweeper.View
                 GameObject tileView = Instantiate(_tilePrefab, pos, Quaternion.identity, transform);
                 tileView.name = $"Tile ({tileModel.GC.X}, {tileModel.GC.Z})";
                 tileView.GetComponent<TileView>().Initialize(tileModel);
-                if (tileModel.HasBomb.Value)
-                {
-                    SpawnBomb();
-                }
-
-                void SpawnBomb()
-                {
-                    GameObject bombView = Instantiate(_bombPrefab, pos, Quaternion.identity, tileView.transform);
-                    bombView.name = $"Bomb ({tileModel.GC.X}, {tileModel.GC.Z})";
-                }
+                tileView.GetComponent<TileView>().SpawnBomb += TileView_OnSpawnBomb;
             }
-
-
         }
 
+        private void TileView_OnSpawnBomb(TileView tileView, TileModel tileModel)
+        {
+            Vector3 pos = GCHelper.ModelToView(tileModel.GC);
+            GameObject bombView = Instantiate(_bombPrefab, pos, Quaternion.identity, tileView.transform);
+            bombView.name = $"Bomb ({tileModel.GC.X}, {tileModel.GC.Z})";
+        }
     }
 }
