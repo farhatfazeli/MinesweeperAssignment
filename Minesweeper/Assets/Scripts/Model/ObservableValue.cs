@@ -1,3 +1,5 @@
+using System;
+
 namespace Minesweeper.Model
 {
     // This class simplifies making properties with callback handling abilities
@@ -24,6 +26,18 @@ namespace Minesweeper.Model
         public void Invoke()
         {
             _action?.Invoke(_value);
+        }
+
+        public void Toggle()
+        {
+            if (typeof(T) == typeof(bool))
+            {
+                Value = (T)(object)!(bool)(object)Value;
+            }
+            else
+            {
+                throw new InvalidOperationException("Toggle is only supported for boolean values.");
+            }
         }
     }
 }

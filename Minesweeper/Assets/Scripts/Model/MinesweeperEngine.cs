@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace Minesweeper.Model
@@ -59,10 +60,9 @@ namespace Minesweeper.Model
 
         private void SpawnBombs(TileModel firstClickedTile)
         {
-            List<TileModel> allTiles = BoardModel.TileDictionary.ListOfTiles;
             List<TileModel> ineligibleTiles = BoardModel.SurroundingTiles(firstClickedTile); // no bombs are allowed on the first clicked tile and its surrounding tiles
             ineligibleTiles.Add(firstClickedTile);
-            List<TileModel> eligibleTiles = allTiles.Except(ineligibleTiles).ToList();
+            List<TileModel> eligibleTiles = BoardModel.TileDictionary.ListOfTiles.Except(ineligibleTiles).ToList();
 
             List<TileModel> tilesWithBombs = eligibleTiles.OrderBy(x => Guid.NewGuid()).Take(AmountOfBombs).ToList();
 
@@ -105,12 +105,12 @@ namespace Minesweeper.Model
 
         private void GameOver()
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         private void FlagTile(TileModel tile)
         {
-
+            tile.HasFlag.Toggle();
         }
     }
 }

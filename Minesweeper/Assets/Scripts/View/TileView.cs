@@ -12,23 +12,32 @@ namespace Minesweeper.View
     {
         [SerializeField] private int _tileFlipSpeed = 60;
         [SerializeField] private TextMeshPro _bombCountText;
+        [SerializeField] private TextMeshPro _flagText;
         private TileModel _tileModel;
 
         public Action<TileView, TileModel> SpawnBomb { get; set; }
 
         public void Initialize(TileModel tileModel)
         {
+            Assert.IsNotNull(_bombCountText);
+            Assert.IsNotNull(_flagText);
+    
             _tileModel = tileModel;
             _tileModel.CountOfAdjacentBombs.Subscribe(TileModel_OnCountOfAdjacentBombsUpdate);
             _tileModel.IsRevealed.Subscribe(TileModel_OnRevealTile);
             _tileModel.ShowCountOfAdjacentBombs.Subscribe(TileModel_OnShowCountOfAdjacentBombs);
             _tileModel.HasBomb.Subscribe(TileModel_OnHasBomb);
-            Assert.IsNotNull(_bombCountText);
+            _tileModel.HasFlag.Subscribe(TileModel_OnHasFlag);
         }
 
-        private void TileModel_OnHasBomb(bool boolean)
+        private void TileModel_OnHasFlag(bool hasFlag)
         {
-            if (boolean)
+            _flagText.gameObject.SetActive(hasFlag);
+        }
+
+        private void TileModel_OnHasBomb(bool hasBomb)
+        {
+            if (hasBomb)
             {
                 SpawnBomb.Invoke(this, _tileModel);
             }
