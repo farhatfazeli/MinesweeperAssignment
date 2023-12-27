@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using Unity.VisualScripting;
 
-namespace Minesweeper.Model //TODO: unsubscribe from events
+namespace Minesweeper.Model
 {
     public class MinesweeperEngine
     {
@@ -45,7 +43,7 @@ namespace Minesweeper.Model //TODO: unsubscribe from events
 
         private void TileModel_OnRevealClick(TileModel tile)
         {
-            if(_isGameOver || _isGameWon) return;
+            if (_isGameOver || _isGameWon) return;
             if (tile.HasFlag.Value) return;
             if (!_isBombsSetup)
             {
@@ -84,13 +82,13 @@ namespace Minesweeper.Model //TODO: unsubscribe from events
 
             List<TileModel> tilesWithBombs = eligibleTiles.OrderBy(x => Guid.NewGuid()).Take(AmountOfBombs).ToList();
 
-            foreach(TileModel tileModel in tilesWithBombs)
+            foreach (TileModel tileModel in tilesWithBombs)
             {
                 tileModel.HasBomb.Value = true;
                 BoardModel.TilesWithBombs.Add(tileModel);
             }
         }
-        
+
         private void CalculateAdjacentBombCounts()
         {
             foreach (TileModel bombTile in BoardModel.TilesWithBombs)
@@ -107,7 +105,6 @@ namespace Minesweeper.Model //TODO: unsubscribe from events
         {
             if (tile.IsRevealed.Value) return;
             if (tile.HasBomb.Value) BombRevealed(tile);
-            //tile.Reveal();
             RevealTile(tile);
             if (tile.HasFlag.Value) FlagTile(tile); //removes flag if tile revealed
             if (tile.CountOfAdjacentBombs.Value > 0) return;
@@ -131,11 +128,10 @@ namespace Minesweeper.Model //TODO: unsubscribe from events
             }
             if (tile.CountOfAdjacentBombs.Value == countOfAdjacentFlags)
             {
-                foreach(TileModel surroundingTile in BoardModel.SurroundingTiles(tile))
+                foreach (TileModel surroundingTile in BoardModel.SurroundingTiles(tile))
                 {
-                    if(!surroundingTile.HasFlag.Value)
+                    if (!surroundingTile.HasFlag.Value)
                     {
-                        //surroundingTile.Reveal();
                         RevealTile(surroundingTile);
                         if (surroundingTile.HasBomb.Value) BombRevealed(tile);
                     }
@@ -155,7 +151,6 @@ namespace Minesweeper.Model //TODO: unsubscribe from events
 
             _isGameWon = true;
             GameWon?.Invoke();
-                //var a = ints1.All(ints2.Contains) && ints1.Count == ints2.Count;
         }
 
         private void BombRevealed(TileModel tile)
@@ -168,11 +163,11 @@ namespace Minesweeper.Model //TODO: unsubscribe from events
         private void FlagTile(TileModel tile)
         {
             tile.HasFlag.Toggle();
-            if(tile.HasFlag.Value && BoardModel.AmountOfBombsRemaining.Value > 0)
+            if (tile.HasFlag.Value && BoardModel.AmountOfBombsRemaining.Value > 0)
             {
                 BoardModel.AmountOfBombsRemaining.Value--;
             }
-            else if(!tile.HasFlag.Value && BoardModel.AmountOfBombsRemaining.Value < AmountOfBombs)
+            else if (!tile.HasFlag.Value && BoardModel.AmountOfBombsRemaining.Value < AmountOfBombs)
             {
                 BoardModel.AmountOfBombsRemaining.Value++;
             }

@@ -21,7 +21,7 @@ namespace Minesweeper.Model
         public void Reveal()
         {
             IsRevealed.Value = true;
-            if(CountOfAdjacentBombs.Value > 0 && !HasBomb.Value)
+            if (CountOfAdjacentBombs.Value > 0 && !HasBomb.Value)
             {
                 ShowCountOfAdjacentBombs.Value = true;
             }

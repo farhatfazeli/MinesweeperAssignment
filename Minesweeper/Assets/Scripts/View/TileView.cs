@@ -22,7 +22,7 @@ namespace Minesweeper.View
         {
             Assert.IsNotNull(_bombCountText);
             Assert.IsNotNull(_flagText);
-    
+
             _tileModel = tileModel;
             _tileModel.CountOfAdjacentBombs.Subscribe(TileModel_OnCountOfAdjacentBombsUpdate);
             _tileModel.IsRevealed.Subscribe(TileModel_OnRevealTile);

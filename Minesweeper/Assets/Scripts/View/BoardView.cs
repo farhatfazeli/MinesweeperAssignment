@@ -15,9 +15,9 @@ namespace Minesweeper.View
         private readonly List<Transform> _allBombs = new();
 
 
-        public Vector3 _smallBombScale = new Vector3(0.1f, 0.1f, 0.1f);
-        public Vector3 _bigBombScale = new Vector3(50f, 50f, 50f);
-        public float duration = 1f;
+        private Vector3 _smallBombScale = new Vector3(0.1f, 0.1f, 0.1f);
+        private Vector3 _bigBombScale = new Vector3(50f, 50f, 50f);
+        private float _animationDuration = 2f;
 
         private void Awake()
         {
@@ -35,24 +35,19 @@ namespace Minesweeper.View
         {
             foreach (Transform bomb in _allBombs)
             {
-                StartCoroutine(ScaleBomb(bomb, _bigBombScale));
+                StartCoroutine(ScaleBomb(bomb, _bigBombScale, true));
             }
         }
 
         public void WinAnimation()
         {
-            Debug.Log("in win animation");
             foreach (TileView tileView in _allTileViews)
             {
-                Debug.Log("before flip");
-
                 tileView.TileModel_OnRevealTile(true);
             }
             foreach (Transform bomb in _allBombs)
             {
-                Debug.Log("before start coroutine");
-
-                StartCoroutine(ScaleBomb(bomb, _smallBombScale));
+                StartCoroutine(ScaleBomb(bomb, _smallBombScale, false));
             }
         }
 
@@ -82,18 +77,26 @@ namespace Minesweeper.View
             _allBombs.Add(bomb.transform);
         }
 
-        public IEnumerator ScaleBomb(Transform bomb, Vector3 targetScale)
+        public IEnumerator ScaleBomb(Transform bomb, Vector3 targetScale, bool reappear)
         {
             yield return new WaitForSeconds(1);
             Vector3 initialScale = bomb.localScale;
             float elapsed = 0f;
-            while (elapsed < duration)
+            while (elapsed < _animationDuration)
             {
-                bomb.localScale = Vector3.Lerp(initialScale, targetScale, elapsed / duration);
+                bomb.localScale = Vector3.Lerp(initialScale, targetScale, elapsed / _animationDuration);
                 elapsed += Time.deltaTime;
                 yield return null;
             }
-            bomb.localScale = targetScale;
+            if (reappear)
+            {
+                bomb.localScale = initialScale;
+
+            }
+            else
+            {
+                bomb.localScale = targetScale;
+            }
         }
     }
 }

@@ -30,8 +30,6 @@ namespace Minesweeper.View
         {
             SetupUIElements();
             SetupEventHandlers();
-            //SetSliderLimits(new(4, 4, 1, 100, 100, 8 * 8 - 9));
-            //UpdateSliderLabels();
         }
 
         private void SetupUIElements()
