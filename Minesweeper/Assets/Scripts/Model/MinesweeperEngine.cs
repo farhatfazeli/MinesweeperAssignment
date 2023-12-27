@@ -38,6 +38,7 @@ namespace Minesweeper.Model
 
         private void TileModel_OnRevealClick(TileModel tile)
         {
+            if (tile.HasFlag.Value) return;
             if (!_isBombsSetup)
             {
                 SetupBombs(tile);
@@ -87,7 +88,7 @@ namespace Minesweeper.Model
 
         private void RevealTile(TileModel tile)
         {
-            if (tile.HasBomb.Value) GameOver();
+            if (tile.HasBomb.Value) GameOver(tile);
             if (tile.IsRevealed.Value) return;
             tile.Reveal();
 
@@ -103,9 +104,12 @@ namespace Minesweeper.Model
             }
         }
 
-        private void GameOver()
+        private void GameOver(TileModel tile)
         {
-            //throw new NotImplementedException();
+            foreach(TileModel bombTile in BoardModel.TilesWithBombs)
+            {
+                bombTile.Reveal();
+            }
         }
 
         private void FlagTile(TileModel tile)
