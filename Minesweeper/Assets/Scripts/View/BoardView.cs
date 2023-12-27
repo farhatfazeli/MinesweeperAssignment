@@ -5,7 +5,7 @@ namespace Minesweeper.View
 {
     public class BoardView : MonoBehaviour
     {
-        private BoardModel _boardModel;
+        public BoardModel BoardModel { get; private set; }
         private GameObject _tilePrefab;
         private GameObject _bombPrefab;
 
@@ -18,13 +18,13 @@ namespace Minesweeper.View
 
         public void Initialize(BoardModel boardModel)
         {
-            _boardModel = boardModel;
+            BoardModel = boardModel;
             PopulateWithTiles();
         }
 
         private void PopulateWithTiles()
         {
-            foreach (TileModel tileModel in _boardModel.TileDictionary.ListOfTiles)
+            foreach (TileModel tileModel in BoardModel.TileDictionary.ListOfTiles)
             {
                 SpawnTileView(tileModel);
             }

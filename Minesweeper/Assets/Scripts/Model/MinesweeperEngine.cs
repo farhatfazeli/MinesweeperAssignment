@@ -15,7 +15,7 @@ namespace Minesweeper.Model
 
         public MinesweeperEngine(int width, int height, int amountOfBombs)
         {
-            BoardModel = new BoardModel(width, height);
+            BoardModel = new BoardModel(width, height, amountOfBombs);
             AmountOfBombs = amountOfBombs;
             SpawnTiles();
         }
@@ -111,6 +111,14 @@ namespace Minesweeper.Model
         private void FlagTile(TileModel tile)
         {
             tile.HasFlag.Toggle();
+            if(tile.HasFlag.Value && BoardModel.AmountOfBombsRemaining.Value > 0)
+            {
+                BoardModel.AmountOfBombsRemaining.Value--;
+            }
+            else if(!tile.HasFlag.Value && BoardModel.AmountOfBombsRemaining.Value < AmountOfBombs)
+            {
+                BoardModel.AmountOfBombsRemaining.Value++;
+            }
         }
     }
 }

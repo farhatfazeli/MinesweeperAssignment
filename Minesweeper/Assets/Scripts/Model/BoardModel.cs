@@ -9,12 +9,14 @@ namespace Minesweeper.Model
         public int Height { get; }
         public TileDictionary TileDictionary { get; }
         public List<TileModel> TilesWithBombs { get; } = new();
+        public ObservableValue<int> AmountOfBombsRemaining { get; set; }
 
-        public BoardModel(int width, int height)
+        public BoardModel(int width, int height, int amountOfBombs)
         {
             Width = width;
             Height = height;
             TileDictionary = new(this);
+            AmountOfBombsRemaining = new(amountOfBombs);
         }
 
         public List<TileModel> SurroundingTiles(TileModel tileModel)
