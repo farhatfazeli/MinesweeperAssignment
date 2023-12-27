@@ -43,11 +43,19 @@ namespace Minesweeper.Model
             {
                 SetupBombs(tile);
             }
-            RevealTile(tile);
+            if (!tile.IsRevealed.Value)
+            {
+                RevealTile(tile);
+            }
+            else if (tile.IsRevealed.Value && tile.CountOfAdjacentBombs.Value > 0)
+            {
+                FlaggedReveal(tile);
+            }
         }
 
         private void TileModel_OnFlagClick(TileModel tile)
         {
+            if (tile.IsRevealed.Value) return;
             FlagTile(tile);
         }
 
@@ -88,20 +96,38 @@ namespace Minesweeper.Model
 
         private void RevealTile(TileModel tile)
         {
-            if (tile.HasBomb.Value) GameOver(tile);
             if (tile.IsRevealed.Value) return;
+            if (tile.HasBomb.Value) GameOver(tile);
             tile.Reveal();
             if (tile.HasFlag.Value) FlagTile(tile); //removes flag if tile revealed
-
-            if (tile.CountOfAdjacentBombs.Value > 0)
-            {
-                tile.ShowCountOfAdjacentBombs.Value = true;
-                return;
-            }
+            if (tile.CountOfAdjacentBombs.Value > 0) return;
 
             foreach (TileModel surroundingTile in BoardModel.SurroundingTiles(tile))
             {
                 RevealTile(surroundingTile);
+            }
+        }
+
+        private void FlaggedReveal(TileModel tile)
+        {
+            int countOfAdjacentFlags = 0;
+            foreach (TileModel surroundingTiles in BoardModel.SurroundingTiles(tile))
+            {
+                if (surroundingTiles.HasFlag.Value)
+                {
+                    countOfAdjacentFlags += 1;
+                }
+
+            }
+            if (tile.CountOfAdjacentBombs.Value == countOfAdjacentFlags)
+            {
+                foreach(TileModel surroundingTile in BoardModel.SurroundingTiles(tile))
+                {
+                    if(!surroundingTile.HasFlag.Value)
+                    {
+                        surroundingTile.Reveal();
+                    }
+                }
             }
         }
 
