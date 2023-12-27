@@ -1,5 +1,8 @@
 using Minesweeper.Model;
 using Minesweeper.View;
+using System;
+using Unity.VisualScripting;
+using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
 
 public class MinesweeperGame : MonoBehaviour
@@ -9,21 +12,43 @@ public class MinesweeperGame : MonoBehaviour
     [SerializeField] private MinesweeperUI _minesweeperUI;
     private MinesweeperEngine _minesweeperEngine;
     private GameObject _board;
-    private int _maxAmountOfBombs;
+
+    private int _sliderWidth { get { return _minesweeperUI.SliderValues.Item1; } }
+    private int _sliderHeight { get { return _minesweeperUI.SliderValues.Item2; } }
+
+    private int _maxAmountOfBombs { get { return _sliderWidth * _sliderHeight - 9; } }// no bombs allowed on first tile clicked nor on its surrounding tiles
 
 
     private void Start()
     {
-        _maxAmountOfBombs = _maxWidth * _maxHeight - 9; // no bombs allowed on first tile clicked nor on its surrounding tiles
-        _minesweeperUI.SliderLimits = (4, 4, 1, _maxWidth, _maxHeight, _maxAmountOfBombs);
+        _minesweeperUI.OnSliderValueChanged += UpdateSliderLimits;
+        _minesweeperUI.SliderValues = (8, 8, 10);
+
+        _minesweeperUI.OnNewGameButtonPressed += StartGame;
         Play(8, 8, 10);
+    }
+
+    private void UpdateSliderLimits()
+    {
+        _minesweeperUI.SetSliderLimits(new(4, 4, 1, _maxWidth, _maxHeight, _maxAmountOfBombs));
+    }
+
+    private void StartGame()
+    {
+        Play(_sliderWidth, _sliderHeight, _maxAmountOfBombs);
     }
 
     private void Play(int width, int height, int amountOfBombs)
     {
         Destroy(_board);
         SetupEngine(width, height, amountOfBombs);
+        _minesweeperEngine.GameOver += OnGameOver;
         SetupBoardView();
+    }
+
+    private void OnGameOver()
+    {
+        Debug.Log("gameover");
     }
 
     private void SetupEngine(int width, int height, int amountOfBombs)

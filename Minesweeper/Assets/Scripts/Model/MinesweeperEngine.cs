@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using Unity.VisualScripting;
 
 namespace Minesweeper.Model //TODO: unsubscribe from events
 {
@@ -10,8 +11,11 @@ namespace Minesweeper.Model //TODO: unsubscribe from events
         public BoardModel BoardModel { get; }
         public int AmountOfBombs { get; }
 
+        public Action GameOver;
+
         #region Constructor
         private bool _isBombsSetup;
+        private bool _isGameOver;
 
         public MinesweeperEngine(int width, int height, int amountOfBombs)
         {
@@ -38,6 +42,7 @@ namespace Minesweeper.Model //TODO: unsubscribe from events
 
         private void TileModel_OnRevealClick(TileModel tile)
         {
+            if(_isGameOver) return;
             if (tile.HasFlag.Value) return;
             if (!_isBombsSetup)
             {
@@ -55,6 +60,7 @@ namespace Minesweeper.Model //TODO: unsubscribe from events
 
         private void TileModel_OnFlagClick(TileModel tile)
         {
+            if (_isGameOver) return;
             if (tile.IsRevealed.Value) return;
             FlagTile(tile);
         }
@@ -97,7 +103,7 @@ namespace Minesweeper.Model //TODO: unsubscribe from events
         private void RevealTile(TileModel tile)
         {
             if (tile.IsRevealed.Value) return;
-            if (tile.HasBomb.Value) GameOver(tile);
+            if (tile.HasBomb.Value) BombRevealed(tile);
             tile.Reveal();
             if (tile.HasFlag.Value) FlagTile(tile); //removes flag if tile revealed
             if (tile.CountOfAdjacentBombs.Value > 0) return;
@@ -126,18 +132,20 @@ namespace Minesweeper.Model //TODO: unsubscribe from events
                     if(!surroundingTile.HasFlag.Value)
                     {
                         surroundingTile.Reveal();
-                        if (surroundingTile.HasBomb.Value) GameOver(tile);
+                        if (surroundingTile.HasBomb.Value) BombRevealed(tile);
                     }
                 }
             }
         }
 
-        private void GameOver(TileModel tile)
+        private void BombRevealed(TileModel tile)
         {
             foreach(TileModel bombTile in BoardModel.TilesWithBombs)
             {
                 bombTile.Reveal();
             }
+            _isGameOver = true;
+            GameOver?.Invoke();
         }
 
         private void FlagTile(TileModel tile)
