@@ -69,7 +69,6 @@ namespace Minesweeper.View
         private void TileModel_OnRevealTile(bool value)
         {
             StartCoroutine(Flip());
-            Debug.Log("Test tile reveal");
         }
 
         private IEnumerator Flip()

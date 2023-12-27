@@ -10,9 +10,9 @@ public class MinesweeperGame : MonoBehaviour
     [SerializeField] private int _minAmountOfBombs = 1;
     [SerializeField] private int _maxWidth = 100;
     [SerializeField] private int _maxHeight = 100;
-    [SerializeField] private int _startingWidth = 8;
-    [SerializeField] private int _startingHeight = 8;
-    [SerializeField] private int _startingAmountOfBombs = 10;
+    [SerializeField] private int _startingWidth = 5;
+    [SerializeField] private int _startingHeight = 5;
+    [SerializeField] private int _startingAmountOfBombs = 4;
     [SerializeField] private MinesweeperUI _minesweeperUI;
 
     private int SliderWidth => _minesweeperUI.SliderValues.width;
@@ -47,6 +47,7 @@ public class MinesweeperGame : MonoBehaviour
     {
         Destroy(_board);
         _minesweeperEngine.GameOver -= OnGameOver;
+        _minesweeperEngine.GameWon -= OnGameWon;
         StartGame(SliderWidth, SliderHeight, SliderBombs);
     }
 
@@ -54,6 +55,7 @@ public class MinesweeperGame : MonoBehaviour
     {
         SetupEngine(width, height, amountOfBombs);
         _minesweeperEngine.GameOver += OnGameOver;
+        _minesweeperEngine.GameWon += OnGameWon;
         SetupBoardView();
         _minesweeperUI.SetupBoardLink();
     }
@@ -61,6 +63,11 @@ public class MinesweeperGame : MonoBehaviour
     private void OnGameOver()
     {
         Debug.Log("gameover");
+    }
+
+    private void OnGameWon()
+    {
+        Debug.Log("gamewon");
     }
 
     private void SetupEngine(int width, int height, int amountOfBombs)

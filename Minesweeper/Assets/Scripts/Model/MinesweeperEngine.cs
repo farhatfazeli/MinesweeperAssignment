@@ -39,6 +39,7 @@ namespace Minesweeper.Model //TODO: unsubscribe from events
                     tileModel.FlagClick.Subscribe(TileModel_OnFlagClick);
                 }
             }
+            BoardModel.UnrevealedTiles = BoardModel.TileDictionary.ListOfTiles.ToList();
         }
         #endregion
 
@@ -52,11 +53,11 @@ namespace Minesweeper.Model //TODO: unsubscribe from events
             }
             if (!tile.IsRevealed.Value)
             {
-                RevealTile(tile);
+                RevealTiles(tile);
             }
             else if (tile.IsRevealed.Value && tile.CountOfAdjacentBombs.Value > 0)
             {
-                FlaggedReveal(tile);
+                FlaggedReveals(tile);
             }
         }
 
@@ -102,21 +103,22 @@ namespace Minesweeper.Model //TODO: unsubscribe from events
         }
         #endregion
 
-        private void RevealTile(TileModel tile)
+        private void RevealTiles(TileModel tile)
         {
             if (tile.IsRevealed.Value) return;
             if (tile.HasBomb.Value) BombRevealed(tile);
-            tile.Reveal();
+            //tile.Reveal();
+            RevealTile(tile);
             if (tile.HasFlag.Value) FlagTile(tile); //removes flag if tile revealed
             if (tile.CountOfAdjacentBombs.Value > 0) return;
 
             foreach (TileModel surroundingTile in BoardModel.SurroundingTiles(tile))
             {
-                RevealTile(surroundingTile);
+                RevealTiles(surroundingTile);
             }
         }
 
-        private void FlaggedReveal(TileModel tile)
+        private void FlaggedReveals(TileModel tile)
         {
             int countOfAdjacentFlags = 0;
             foreach (TileModel surroundingTiles in BoardModel.SurroundingTiles(tile))
@@ -133,19 +135,32 @@ namespace Minesweeper.Model //TODO: unsubscribe from events
                 {
                     if(!surroundingTile.HasFlag.Value)
                     {
-                        surroundingTile.Reveal();
+                        //surroundingTile.Reveal();
+                        RevealTile(surroundingTile);
                         if (surroundingTile.HasBomb.Value) BombRevealed(tile);
                     }
                 }
             }
         }
 
+        private void RevealTile(TileModel tile)
+        {
+            BoardModel.RevealTile(tile);
+            CheckWinCondition();
+        }
+
+        private void CheckWinCondition()
+        {
+            if (BoardModel.UnrevealedTiles.Count != BoardModel.TilesWithBombs.Count) return;
+
+            _isGameWon = true;
+            GameWon?.Invoke();
+                //var a = ints1.All(ints2.Contains) && ints1.Count == ints2.Count;
+        }
+
         private void BombRevealed(TileModel tile)
         {
-            foreach(TileModel bombTile in BoardModel.TilesWithBombs)
-            {
-                bombTile.Reveal();
-            }
+            BoardModel.RevealBombTiles();
             _isGameOver = true;
             GameOver?.Invoke();
         }
