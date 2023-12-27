@@ -22,7 +22,7 @@ public class MinesweeperGame : MonoBehaviour
     #endregion
 
     private MinesweeperEngine _minesweeperEngine;
-    private GameObject _board;
+    private BoardView _boardView;
 
     private void Start()
     {
@@ -45,7 +45,7 @@ public class MinesweeperGame : MonoBehaviour
 
     private void StartNewGame()
     {
-        Destroy(_board);
+        Destroy(_boardView.gameObject);
         _minesweeperEngine.GameOver -= OnGameOver;
         _minesweeperEngine.GameWon -= OnGameWon;
         StartGame(SliderWidth, SliderHeight, SliderBombs);
@@ -63,11 +63,13 @@ public class MinesweeperGame : MonoBehaviour
     private void OnGameOver()
     {
         Debug.Log("gameover");
+        _boardView.LoseAnimation();
     }
 
     private void OnGameWon()
     {
         Debug.Log("gamewon");
+        _boardView.WinAnimation();
     }
 
     private void SetupEngine(int width, int height, int amountOfBombs)
@@ -77,7 +79,8 @@ public class MinesweeperGame : MonoBehaviour
 
     private void SetupBoardView()
     {
-        _board = new GameObject("Board");
-        _board.AddComponent<BoardView>().Initialize(_minesweeperEngine.BoardModel);
+        GameObject board = new GameObject("Board");
+        _boardView = board.AddComponent<BoardView>();
+        _boardView.Initialize(_minesweeperEngine.BoardModel);
     }
 }

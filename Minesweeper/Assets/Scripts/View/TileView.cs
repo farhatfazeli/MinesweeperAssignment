@@ -13,6 +13,9 @@ namespace Minesweeper.View
         [SerializeField] private int _tileFlipSpeed = 60;
         [SerializeField] private TextMeshPro _bombCountText;
         [SerializeField] private TextMeshPro _flagText;
+
+        public Transform Bomb { get; set; }
+
         private TileModel _tileModel;
 
         public Action<TileView, TileModel> SpawnBomb { get; set; }
@@ -66,7 +69,7 @@ namespace Minesweeper.View
             }
         }
 
-        private void TileModel_OnRevealTile(bool value)
+        public void TileModel_OnRevealTile(bool value)
         {
             StartCoroutine(Flip());
         }
