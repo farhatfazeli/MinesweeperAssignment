@@ -14,6 +14,8 @@ public class MinesweeperGame : MonoBehaviour
     [SerializeField] private int _startingHeight = 5;
     [SerializeField] private int _startingAmountOfBombs = 4;
     [SerializeField] private MinesweeperUI _minesweeperUI;
+    [SerializeField] private Camera _camera;
+    [SerializeField] private int _padding = 5;
 
     private int SliderWidth => _minesweeperUI.SliderValues.width;
     private int SliderHeight => _minesweeperUI.SliderValues.height;
@@ -58,6 +60,25 @@ public class MinesweeperGame : MonoBehaviour
         _minesweeperEngine.GameWon += OnGameWon;
         SetupBoardView();
         _minesweeperUI.SetupBoardLink();
+        AdjustCamera();
+    }
+
+    void AdjustCamera()
+    {
+        float targetOrthographicSize = Mathf.Max(SliderWidth, SliderHeight) * 0.5f + _padding;
+
+        _camera.orthographicSize = targetOrthographicSize;
+
+        float aspectRatio = Screen.width / (float)Screen.height;
+
+        if (SliderWidth > SliderHeight)
+        {
+            _camera.transform.position = new Vector3(SliderWidth * 0.5f, 10f, SliderHeight * 0.5f);
+        }
+        else
+        {
+            _camera.transform.position = new Vector3(SliderWidth * 0.5f * aspectRatio, 10f, SliderHeight * 0.5f);
+        }
     }
 
     private void OnGameOver()

@@ -14,8 +14,6 @@ namespace Minesweeper.View
         [SerializeField] private TextMeshPro _bombCountText;
         [SerializeField] private TextMeshPro _flagText;
 
-        public Transform Bomb { get; set; }
-
         private TileModel _tileModel;
 
         public Action<TileView, TileModel> SpawnBomb { get; set; }

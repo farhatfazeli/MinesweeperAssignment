@@ -336,7 +336,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.3
-  far clip plane: 10
+  far clip plane: 11
   field of view: 60
   orthographic: 1
   orthographic size: 9
@@ -430,9 +430,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0a16d4c2358e8743bc4bb63110da66f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _minWidth: 4
+  _minHeight: 4
+  _minAmountOfBombs: 1
   _maxWidth: 100
   _maxHeight: 100
+  _startingWidth: 8
+  _startingHeight: 8
+  _startingAmountOfBombs: 10
   _minesweeperUI: {fileID: 1349752178}
+  _camera: {fileID: 963194227}
+  _padding: 2
 --- !u!1 &1349752175
 GameObject:
   m_ObjectHideFlags: 0

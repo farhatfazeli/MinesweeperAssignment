@@ -15,6 +15,9 @@ namespace Minesweeper.View
         private readonly List<Transform> _allBombs = new();
 
 
+        public Vector3 _smallBombScale = new Vector3(0.1f, 0.1f, 0.1f);
+        public Vector3 _bigBombScale = new Vector3(50f, 50f, 50f);
+        public float duration = 1f;
 
         private void Awake()
         {
@@ -92,9 +95,5 @@ namespace Minesweeper.View
             }
             bomb.localScale = targetScale;
         }
-
-        public Vector3 _smallBombScale = new Vector3(0.1f, 0.1f, 0.1f);
-        public Vector3 _bigBombScale = new Vector3(10f, 10f, 10f);
-        public float duration = 1f;
     }
 }
