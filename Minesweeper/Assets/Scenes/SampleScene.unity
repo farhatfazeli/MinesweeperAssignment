@@ -430,6 +430,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0a16d4c2358e8743bc4bb63110da66f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _maxWidth: 100
+  _maxHeight: 100
+  _minesweeperUI: {fileID: 1349752178}
 --- !u!1 &1349752175
 GameObject:
   m_ObjectHideFlags: 0
@@ -486,7 +489,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1349752175}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9ec354071823f4040afbf01a74a50b96, type: 3}
   m_Name: 

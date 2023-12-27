@@ -2,4 +2,10 @@
     <ui:VisualElement name="BombCountVisual" style="left: 2%; top: 2%;">
         <ui:Label text="#BOMBS: " display-tooltip-when-elided="true" name="BombCountText" style="-unity-font: url(&apos;project://database/Assets/TextMesh%20Pro/Fonts/LiberationSans.ttf?fileID=12800000&amp;guid=e3265ab4bf004d28a9537516768c1c75&amp;type=3#LiberationSans&apos;); font-size: 50px;" />
     </ui:VisualElement>
+    <ui:VisualElement name="NewGameMenu" style="left: 2%; bottom: 2%; position: absolute; flex-direction: row; align-items: stretch; justify-content: space-around; right: 2%; top: auto;">
+        <ui:Slider picking-mode="Ignore" label="Width" value="38.8" high-value="100" name="Width" direction="Horizontal" low-value="4" style="font-size: 50px; width: 433px;" />
+        <ui:Slider picking-mode="Ignore" label="Height" value="42" high-value="100" name="Height" low-value="4" style="font-size: 50px; width: 433px;" />
+        <ui:Slider picking-mode="Ignore" label="#Bombs" value="42" high-value="100" name="AmountOfBombs" low-value="1" style="font-size: 50px; width: 433px;" />
+        <ui:Button text="New Game" display-tooltip-when-elided="true" name="NewGameButton" style="font-size: 50px; white-space: nowrap; align-items: stretch; flex-direction: column;" />
+    </ui:VisualElement>
 </ui:UXML>

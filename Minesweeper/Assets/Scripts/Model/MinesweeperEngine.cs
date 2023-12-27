@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 
-namespace Minesweeper.Model
+namespace Minesweeper.Model //TODO: unsubscribe from events
 {
     public class MinesweeperEngine
     {
@@ -126,6 +126,7 @@ namespace Minesweeper.Model
                     if(!surroundingTile.HasFlag.Value)
                     {
                         surroundingTile.Reveal();
+                        if (surroundingTile.HasBomb.Value) GameOver(tile);
                     }
                 }
             }
