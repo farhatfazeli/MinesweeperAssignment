@@ -12,10 +12,12 @@ namespace Minesweeper.Model //TODO: unsubscribe from events
         public int AmountOfBombs { get; }
 
         public Action GameOver;
+        public Action GameWon;
 
         #region Constructor
         private bool _isBombsSetup;
         private bool _isGameOver;
+        private bool _isGameWon;
 
         public MinesweeperEngine(int width, int height, int amountOfBombs)
         {
@@ -42,7 +44,7 @@ namespace Minesweeper.Model //TODO: unsubscribe from events
 
         private void TileModel_OnRevealClick(TileModel tile)
         {
-            if(_isGameOver) return;
+            if(_isGameOver || _isGameWon) return;
             if (tile.HasFlag.Value) return;
             if (!_isBombsSetup)
             {
@@ -60,7 +62,7 @@ namespace Minesweeper.Model //TODO: unsubscribe from events
 
         private void TileModel_OnFlagClick(TileModel tile)
         {
-            if (_isGameOver) return;
+            if (_isGameOver || _isGameWon) return;
             if (tile.IsRevealed.Value) return;
             FlagTile(tile);
         }
