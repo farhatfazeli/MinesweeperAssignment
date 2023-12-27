@@ -91,6 +91,7 @@ namespace Minesweeper.Model
             if (tile.HasBomb.Value) GameOver(tile);
             if (tile.IsRevealed.Value) return;
             tile.Reveal();
+            if (tile.HasFlag.Value) FlagTile(tile); //removes flag if tile revealed
 
             if (tile.CountOfAdjacentBombs.Value > 0)
             {
